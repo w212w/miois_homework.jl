@@ -36,11 +36,11 @@ function firstnorm(vec_::AbstractVector{<:Number})
 end
 
 function secondnorm(vec_::AbstractVector{<:Number})
-    res = 0
+    ress = 0
     for el in vec_
-        res += el^2
+        ress += el^2
     end
-    result = sqrt(res)
+    result = sqrt(ress)
     return result
 end
 
