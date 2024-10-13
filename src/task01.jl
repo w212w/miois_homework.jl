@@ -56,28 +56,81 @@ function infnorm(vec_::AbstractVector{<:Number})
 end
 
 function firstnorm(vec::AbstractMatrix{<:Number})
-    res = 0
-
-    for j in size(vec, 2)
-        j_sum = 0
-        
-        for i in eachindex(vec[:, j])
-            el = abs(vec[i, j])
-            j_sum += el
+    result = 0
+    for j in axes(vec, 2)
+        x = 0
+        for i in axes(vec, 1)
+            x += abs(vec[i, j])
         end
-        res = max(res, j_sum)
+        if x > result
+            result = x
+        end
     end
-    return res
+    return result
 end
 
 function infnorm(vec_::AbstractMatrix{<:Number})
-    return 0;
+    result = 0
+    for i in axes(vec_, 1)
+        x = 0
+        for j in axes(vec_, 2)
+            x += abs(vec_[i, j])
+        end
+        if x > result
+            result = x
+        end
+    end
+    return result
 end
 
 function isleap(year)
-    return false;
+    if year % 4 == 0
+        if year % 100 == 0
+            if year % 400 == 0
+                return true
+            else 
+                return false
+            end
+        else 
+            return true
+        end
+    else return false
+    end
 end
 
 function chesscolor(cell1, cell2)
-    return false;
+    a = 0
+    b = 0
+    function check_cell(cell)
+        column = 0
+        row = 0
+        column_num = 0
+        if length(cell) != 2 || typeof(cell[1]) != Char ||  typeof(cell[2]) != Int
+            return "Incorrect input of coordinates of the first cell.  A vector with a symbol and a number is expected"
+        end
+        column, row = cell[1], cell[2]
+        if column < 'a' || column > 'h'
+            return "Incorrect symbol for column.  Must be from 'a' to 'h'"
+        end
+        if row < 1 || row > 8
+            return "Incorrect number for series.  Must be from 1 to 8"
+        end
+        column_num = Int(column) - Int('a') + 1
+        if (column_num + row) % 2 == 0
+            return true
+        else
+            return false
+        end
+    end
+
+    a = check_cell(cell1)
+    b = check_cell(cell2)
+
+    if (a == true) && (b == true)
+        return true
+    elseif (a == false) && (b == false)
+        return true
+    else
+        return false
+    end
 end
